@@ -4,7 +4,16 @@ urllib3.disable_warnings()
 import json
 
 class Loja():
-    def __init__(self, json_dados) -> None:
+    def __init__(self, json_dados: dict) -> None:
+        """Representa uma loja
+
+        Args:
+            json_dados (dict): dicionário com dados da loja
+
+        Raises:
+            IndexError: 
+            IndexError: 
+        """
         self.id_loja = json_dados["id"]
         self.nome = json_dados["name"]
         self.slug = json_dados["slug"]
@@ -35,6 +44,12 @@ class Loja():
 
 class Cliente():
     def __init__(self, latitude:float = -23.56571961652763, longitude:float = -46.651259360931014) -> None:
+        """CLiente da API Cotabest, consulta as lojas do Atacadão
+
+        Args:
+            latitude (float, optional): latitude para consulta. Defaults to -23.56571961652763.
+            longitude (float, optional): longitude para consulta. Defaults to -46.651259360931014.
+        """
         self.lista_lojas = []
         url_api = f"https://apis.cotabest.com.br/folhetos/stores?latitude={latitude}&longitude={longitude}"
         with requests.get(url_api, verify=False) as r:

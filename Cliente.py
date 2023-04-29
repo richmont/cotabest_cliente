@@ -54,7 +54,7 @@ if __name__ == "__main__":
     c = Cliente()
     
     for loja in c.lista_lojas:
-        print(loja.nome)
-        if loja.abre_domingo is not True:
-            print(f"Esta loja não abre domingo: {loja.nome}")
+        if loja.horario_fechamento_domingo != "18:00:00":
+            print(f"{loja.nome} abre as {loja.horario_abertura_domingo} e fecha as {loja.horario_fechamento_domingo}")
+        
     print("Lojas obtidas no programa: ", len(c.lista_lojas))

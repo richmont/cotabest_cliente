@@ -25,19 +25,15 @@ class Loja():
             self.abre_domingo = True
             for dia in json_dados["opening_hours"]:
                 if dia["type"] == "domingo":
-                    self.horario_abertura_domingo = dia["opening"]
-                    self.horario_fechamento_domingo = dia["closure"]
+                    if dia["opening"] is None:
+                        self.abre_domingo = False
+                    else:
+                        self.horario_abertura_domingo = dia["opening"]
+                        self.horario_fechamento_domingo = dia["closure"]
                 if dia["type"] == "segunda-a-sabado":
                     self.horario_abertura_semana = dia["opening"]
                     self.horario_fechamento_semana = dia["closure"]
-            
-        else:
-            self.abre_domingo = False
-            if dia["type"] == "segunda-a-sabado":
-                    self.horario_abertura_semana = dia["opening"]
-                    self.horario_fechamento_semana = dia["closure"]
-            else:
-                raise IndexError(f"Loja {self.nome} abre em dia diferente de segunda a sábado")
+
         
         
         
@@ -66,10 +62,15 @@ class Cliente():
             self.lista_lojas.append(loja)
 
 if __name__ == "__main__":
-    c = Cliente()
-    
-    for loja in c.lista_lojas:
-        if loja.horario_fechamento_domingo != "18:00:00":
-            print(f"{loja.nome} abre as {loja.horario_abertura_domingo} e fecha as {loja.horario_fechamento_domingo}")
+    try:
+        c = Cliente()
         
-    print("Lojas obtidas no programa: ", len(c.lista_lojas))
+        for loja in c.lista_lojas:
+            if loja.abre_domingo:
+                if loja.horario_fechamento_domingo != "18:00:00":
+                    print(f"{loja.nome} abre aos domingos as {loja.horario_abertura_domingo} e fecha as {loja.horario_fechamento_domingo}")
+            else:
+                print(f"{loja.nome} não abre domingo, mas em dia de semana abre as {loja.horario_abertura_semana} e fecha as {loja.horario_fechamento_semana}")
+        print("Lojas obtidas no programa: ", len(c.lista_lojas))
+    except requests.exceptions.JSONDecodeError:
+        print("Falha na requisição, tente novamente")
